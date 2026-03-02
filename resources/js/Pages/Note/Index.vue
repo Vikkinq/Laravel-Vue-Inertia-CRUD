@@ -1,9 +1,19 @@
 <script setup>
-    import { Link } from '@inertiajs/vue3';
+    import { Link, router, useForm } from '@inertiajs/vue3';
 
     defineProps({
         posts: Array
     });
+
+    const deletePost = (id) => {
+        const form = useForm()
+        form.delete(`/posts/${id}`, {
+            onSuccess: () => {
+                console.log("Deleted")
+                window.location.href = '/posts'
+        }
+    })
+}
     
 </script>
 
@@ -40,11 +50,7 @@
             :href="`/posts/${post.id}/edit`"
             class="text-green-500 hover:underline"
           >Edit</Link> |
-          <Link
-            :href="`/posts/${post.id}/delete`"
-            method="DELETE"
-            class="text-red-500 hover:underline"
-          >Delete</Link>
+          <button @click="deletePost(post.id)">Delete</button>
         </div>
       </div>
     </div>
