@@ -6,9 +6,9 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserNameController;
 use App\Http\Controllers\TestController;
 
-Route::get('/', function () {
-    return Inertia::render('Home');
-});
+// Route::get('/', function () {
+//     return Inertia::render('Home');
+// });
 
 // Notes App
 Route::get('/shop', [TestController::class, 'index'])->name('test.index');
@@ -23,12 +23,12 @@ Route::get('/shop', [TestController::class, 'index'])->name('test.index');
 
 // Post CRUD
 // resource‑style
-// Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
-// Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
-// Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
-// Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
-// Route::put('/posts/{post}/update', [PostController::class, 'update'])->name('posts.update');
-// Route::delete('/posts/{post}/delete', [PostController::class, 'destroy'])->name('posts.destroy');
-// Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
+Route::get('/notes', [PostController::class, 'index'])->name('notes.index');
+Route::get('/notes/create', [PostController::class, 'create'])->name('notes.create');
+Route::post('/notes', [PostController::class, 'store'])->name('notes.store');
+Route::get('/notes/{post}/edit', [PostController::class, 'edit'])->name('notes.edit');
+Route::put('/notes/{post}/update', [PostController::class, 'update'])->name('notes.update');
+Route::delete('/notes/{post}/delete', [PostController::class, 'destroy'])->name('notes.destroy');
+Route::get('/notes/{post}', [PostController::class, 'show'])->name('notes.show');
 
-Route::resource('posts', PostController::class);
+// Route::resource('notes', PostController::class);

@@ -1,6 +1,7 @@
 import '../css/app.css'
 
 import { ZiggyVue } from 'ziggy-js'
+import { Ziggy } from './ziggy'   // 👈 ADD THIS
 import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
@@ -11,7 +12,7 @@ createInertiaApp({
   setup({ el, App, props, plugin }) {
     createApp({ render: () => h(App, props) })
       .use(plugin)
-      .use(ZiggyVue)
+      .use(ZiggyVue, Ziggy) // 👈 PASS Ziggy HERE
       .mount(el)
   },
 })

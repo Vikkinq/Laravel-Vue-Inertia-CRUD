@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class PostController extends Controller
@@ -13,11 +14,28 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(){
-        $posts = Post::all();
+    public function index(Request $request){
+
+        $sort = $request->get('sort', 'newest');
+
+        $post = Post::query();
+
+        if($sort === 'oldest'){
+            $post->orderBy('created_at', 'asc');
+        } else {
+            $post->orderBy('created_at', 'desc');
+        }
+
+        $paginatedPosts = $post->paginate(5)->withQueryString();
 
         return Inertia::render('Note/Index', [
-            'posts' => $posts
+            'posts' => $paginatedPosts->items(),
+            'pagination' => [
+                'total' => $paginatedPosts->total(),
+                'per_page' => $paginatedPosts->perPage(),
+                'current_page' => $paginatedPosts->currentPage(),
+                'last_page' => $paginatedPosts->lastPage(),
+            ]
         ]);
     }
 
@@ -36,7 +54,7 @@ class PostController extends Controller
 
         $post = Post::create($newData);
 
-        return to_route('posts.index');
+        return to_route('notes.index');
     }
 
     /**
@@ -61,9 +79,11 @@ class PostController extends Controller
      * Update the specified resource in storage.
      */
     public function update(UpdatePostRequest $request, Post $post){
-        $updatedData = $request->validated();
+        $post->update($request->validated());
 
-        $post->update($updatedData);
+        // return $this->index();
+        // return redirect()->route('/notes');
+        return Inertia::location(route('notes.index'));
     }
 
     /**
@@ -71,5 +91,10 @@ class PostController extends Controller
      */
     public function destroy(Post $post){
         $post->delete();
+
+        // return Inertia::render('Note/Index', [
+        //     'posts' => Post::all()
+        // ]);
+        return Inertia::location(route('notes.index'));
     }
 }
